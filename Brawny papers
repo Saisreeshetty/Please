@@ -1,0 +1,37 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class BrawnyPapers {
+    
+    public static int findLargestBrawnyPaper(int[][] papers) {
+        Map<Integer, Integer> widths = new HashMap<>();
+        Map<Integer, Integer> heights = new HashMap<>();
+        
+        for (int[] paper : papers) {
+            int width = paper[0];
+            int height = paper[1];
+            
+            widths.put(width, widths.getOrDefault(width, 0) + 1);
+            heights.put(height, heights.getOrDefault(height, 0) + 1);
+        }
+        
+        int maxArea = 0;
+        
+        for (int[] paper : papers) {
+            int width = paper[0];
+            int height = paper[1];
+            
+            if (widths.get(width) == 1 || heights.get(height) == 1) {
+                maxArea = Math.max(maxArea, width * height);
+            }
+        }
+        
+        return maxArea;
+    }
+    
+    public static void main(String[] args) {
+        int[][] papers = {{4, 6}, {6, 8}, {2, 3}, {3, 5}, {5, 7}};
+        int largestArea = findLargestBrawnyPaper(papers);
+        System.out.println("Largest area of a brawny paper: " + largestArea);
+    }
+}
