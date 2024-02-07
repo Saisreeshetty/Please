@@ -1,0 +1,62 @@
+import java.util.*;
+
+public class YounglifeSentinels {
+    
+    static class AncestralTree {
+        public char name;
+        public AncestralTree ancestor;
+
+        AncestralTree(char name) {
+            this.name = name;
+            this.ancestor = null;
+        }
+    }
+
+    public static AncestralTree getYoungestCommonAncestor(
+            AncestralTree topAncestor, AncestralTree descendantOne, AncestralTree descendantTwo) {
+        int depthOne = getDescendantDepth(descendantOne, topAncestor);
+        int depthTwo = getDescendantDepth(descendantTwo, topAncestor);
+
+        if (depthOne > depthTwo) {
+            return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo);
+        } else {
+            return backtrackAncestralTree(descendantTwo, descendantOne, depthTwo - depthOne);
+        }
+    }
+
+    public static int getDescendantDepth(AncestralTree descendant, AncestralTree topAncestor) {
+        int depth = 0;
+        while (descendant != topAncestor) {
+            descendant = descendant.ancestor;
+            depth++;
+        }
+        return depth;
+    }
+
+    public static AncestralTree backtrackAncestralTree(AncestralTree lowerDescendant, AncestralTree higherDescendant, int diff) {
+        while (diff > 0) {
+            lowerDescendant = lowerDescendant.ancestor;
+            diff--;
+        }
+        while (lowerDescendant != higherDescendant) {
+            lowerDescendant = lowerDescendant.ancestor;
+            higherDescendant = higherDescendant.ancestor;
+        }
+        return lowerDescendant;
+    }
+
+    public static void main(String[] args) {
+        // Example usage:
+        AncestralTree topAncestor = new AncestralTree('A');
+        topAncestor.ancestor = null;
+
+        AncestralTree descendantOne = new AncestralTree('B');
+        descendantOne.ancestor = topAncestor;
+
+        AncestralTree descendantTwo = new AncestralTree('C');
+        descendantTwo.ancestor = topAncestor;
+
+        AncestralTree youngestCommonAncestor = getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo);
+        System.out.println("Youngest Common Ancestor: " + youngestCommonAncestor.name);
+    }
+}
